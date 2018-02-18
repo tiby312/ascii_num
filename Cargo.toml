@@ -2,5 +2,10 @@
 name = "ascii_num"
 version = "0.1.0"
 authors = ["Ken Reed <kenakioreed@gmail.com>"]
+description = "digit to ascii numbers"
+license = "MIT/Apache-2.0"
+repository = "https://github.com/tiby312/ascii_num"
+keywords = ["tree", "binary"]
+readme = "readme.md"
 
 [dependencies]

@@ -1,5 +1,17 @@
-//#![feature(conservative_impl_trait)]
-
+//!
+//!Simple library that generates point coordinates for drawing each digit of a decimal number.
+//!
+//!For example the digit "2" would return the x/y coordinates for each 2 in the below picture:
+//!
+//!```
+//!
+//!..2222
+//! 22  22
+//!    22
+//!   22
+//! 222222
+//!```
+//!
 
 static MISCSTR:&'static str = "
     0
@@ -130,9 +142,7 @@ mod digit{
 
 		//10^x=num
 		let start_10=(num as f64).log10().floor() as u32 +1;
-		//println!("num={:?} start_10={:?}",num,start_10);
-
-		let mut rest=num;
+		
 		let mut acc=10usize.pow(start_10);
 		acc/=10;
 		DigitIter{acc,rest:num,num_digit_left:start_10 as usize}
@@ -157,13 +167,14 @@ fn get_str_digit(num:usize)->Vec<(usize,usize)>{
 }
 
 
-
+///Create some misc symbols. Look at static strings in the source code 
+///to figure out which ones.
 pub fn get_misc(num:usize)->Vec<(usize,usize)>{
 	assert!(num<6);
 	let b=MISCSTR.lines().skip(1).skip(6*num).take(6);
 
 	let mut vec=Vec::new();
-	//println!("start");
+	
 	for (y,line) in b.enumerate(){
 
 		for (x,c) in line.chars().enumerate(){
@@ -171,35 +182,24 @@ pub fn get_misc(num:usize)->Vec<(usize,usize)>{
 				vec.push((x,y));
 			}
 		}
-		//println!("{:?}",line);
 	}
 	vec
 }
 
 
-///Pass in a number
-///Returns digits in decimal in coordinate form
+///Pass in a number.
+///Returns digits in decimal in coordinate form.
+///x grows rightwards.
+///y grows downwards.
+///one unit is one ascii character.
 pub fn get_coords(num:usize)->Vec<Vec<(usize,usize)>>{
 	let mut vec=Vec::new();
-	//println!("start");
+	
 	for digit in digit::get_dec_digit(num){
-		//println!("digit={}",digit);
 		vec.push(get_str_digit(digit));
 	}
 	vec
 }
-/*
-fn main(){
-	for i in 0..10{
-		let v=get_str_digit(i);
-		println!("debug={:?}",v);
-	}
-
-	println!("{:?}",get_coords(523));
-
-}
-*/
-
 
 #[cfg(test)]
 mod tests {
