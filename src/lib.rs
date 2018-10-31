@@ -1,3 +1,5 @@
+#![feature(trusted_len)]
+
 //!
 //!Simple library that generates point coordinates for drawing each digit of a decimal number.
 //!
@@ -117,6 +119,7 @@ static NUMSTR:&'static str = "
 
 mod digit{
 
+	#[derive(Clone,Copy)]
 	pub struct DigitIter{
 		acc:usize,
 		rest:usize,
@@ -136,7 +139,14 @@ mod digit{
 			self.num_digit_left-=1;
 			Some(digit)
 		}
+		fn size_hint(&self)->(usize,Option<usize>){
+			(self.num_digit_left,Some(self.num_digit_left))
+		}
 	}
+	
+	impl std::iter::FusedIterator for DigitIter{}
+	impl std::iter::ExactSizeIterator for DigitIter{}
+	unsafe impl std::iter::TrustedLen for DigitIter{}
 
 	pub fn get_dec_digit(num:usize)->DigitIter{
 
@@ -150,20 +160,70 @@ mod digit{
 
 }
 
-fn get_str_digit(num:usize)->Vec<(usize,usize)>{
+
+pub struct PointIterator{
+	inner:std::vec::IntoIter<[usize;2]>
+}
+impl Iterator for PointIterator{
+	type Item=[usize;2];
+	fn next(&mut self)->Option<Self::Item>{
+		self.inner.next()
+	}
+
+	fn size_hint(&self)->(usize,Option<usize>){
+		self.inner.size_hint()
+	}
+}
+
+impl std::iter::FusedIterator for PointIterator{}
+impl std::iter::ExactSizeIterator for PointIterator{}
+unsafe impl std::iter::TrustedLen for PointIterator{}
+
+
+
+#[derive(Clone,Copy)]
+pub struct PointDigitIterator{
+	inner:digit::DigitIter
+}
+impl Iterator for PointDigitIterator{
+	type Item=PointIterator;
+	fn next(&mut self)->Option<Self::Item>{
+		match self.inner.next(){
+			Some(digit)=>{
+				Some(get_str_digit(digit))
+			},
+			None=>{
+				None
+			}
+		}
+		
+	}
+	fn size_hint(&self)->(usize,Option<usize>){
+		self.inner.size_hint()
+	}
+}
+
+
+impl std::iter::FusedIterator for PointDigitIterator{}
+
+impl std::iter::ExactSizeIterator for PointDigitIterator{}
+unsafe impl std::iter::TrustedLen for PointDigitIterator{}
+
+fn get_str_digit(num:usize)->PointIterator{
 	assert!(num<10);
 	let b=NUMSTR.lines().skip(1).skip(6*num).take(6);
 
+	let target_char=num.to_string().chars().next().unwrap();
 	let mut vec=Vec::new();
+	let mut count=0;
 	for (y,line) in b.enumerate(){
 		for (x,c) in line.chars().enumerate(){
-			if c==num.to_string().chars().next().unwrap(){
-				vec.push((x,y));
+			if c==target_char{  //TODO inefficient
+				vec.push([x,y]);
 			}
 		}
-		//println!("{:?}",line);
 	}
-	vec
+	PointIterator{inner:vec.into_iter()}
 }
 
 
@@ -192,13 +252,16 @@ pub fn get_misc(num:usize)->Vec<(usize,usize)>{
 ///x grows rightwards.
 ///y grows downwards.
 ///one unit is one ascii character.
-pub fn get_coords(num:usize)->Vec<Vec<(usize,usize)>>{
+pub fn get_coords(num:usize)->PointDigitIterator{
+	/*
 	let mut vec=Vec::new();
 	
-	for digit in digit::get_dec_digit(num){
+	for digit in {
 		vec.push(get_str_digit(digit));
 	}
-	vec
+	*/
+	PointDigitIterator{inner:digit::get_dec_digit(num)}
+	//vec
 }
 
 #[cfg(test)]
