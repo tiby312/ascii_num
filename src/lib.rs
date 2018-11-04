@@ -215,7 +215,6 @@ fn get_str_digit(num:usize)->PointIterator{
 
 	let target_char=num.to_string().chars().next().unwrap();
 	let mut vec=Vec::new();
-	let mut count=0;
 	for (y,line) in b.enumerate(){
 		for (x,c) in line.chars().enumerate(){
 			if c==target_char{  //TODO inefficient
