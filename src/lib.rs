@@ -252,15 +252,7 @@ pub fn get_misc(num:usize)->Vec<(usize,usize)>{
 ///y grows downwards.
 ///one unit is one ascii character.
 pub fn get_coords(num:usize)->PointDigitIterator{
-	/*
-	let mut vec=Vec::new();
-	
-	for digit in {
-		vec.push(get_str_digit(digit));
-	}
-	*/
 	PointDigitIterator{inner:digit::get_dec_digit(num)}
-	//vec
 }
 
 #[cfg(test)]
