@@ -1,4 +1,3 @@
-#![feature(trusted_len)]
 
 //!
 //!Simple library that generates point coordinates for drawing each digit of a decimal number.
@@ -146,7 +145,7 @@ mod digit{
 	
 	impl std::iter::FusedIterator for DigitIter{}
 	impl std::iter::ExactSizeIterator for DigitIter{}
-	unsafe impl std::iter::TrustedLen for DigitIter{}
+	//unsafe impl std::iter::TrustedLen for DigitIter{}
 
 	pub fn get_dec_digit(num:usize)->DigitIter{
 
@@ -177,7 +176,7 @@ impl Iterator for PointIterator{
 
 impl std::iter::FusedIterator for PointIterator{}
 impl std::iter::ExactSizeIterator for PointIterator{}
-unsafe impl std::iter::TrustedLen for PointIterator{}
+//unsafe impl std::iter::TrustedLen for PointIterator{}
 
 
 
@@ -207,7 +206,7 @@ impl Iterator for PointDigitIterator{
 impl std::iter::FusedIterator for PointDigitIterator{}
 
 impl std::iter::ExactSizeIterator for PointDigitIterator{}
-unsafe impl std::iter::TrustedLen for PointDigitIterator{}
+//unsafe impl std::iter::TrustedLen for PointDigitIterator{}
 
 fn get_str_digit(num:usize)->PointIterator{
 	assert!(num<10);
