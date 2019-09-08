@@ -10,3 +10,5 @@ readme = "readme.md"
 edition = "2018"
 
 [dependencies]
+axgeom = {path="../axgeom"}
+digits_iterator = {path="../digits-iterator-rs"}
