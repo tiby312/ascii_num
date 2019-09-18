@@ -74,8 +74,8 @@ pub struct Digit<'a>{
 }
 
 impl<'a> Digit<'a>{
-	pub fn num(&self)->usize{
-		self.num as usize
+	pub fn num(&self)->u8{
+		self.num
 	}
 	pub fn get(&self)->&[Vec2<usize>]{
 		self.inner.get()
