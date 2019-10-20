@@ -64,7 +64,13 @@ pub static NUMSTR:&'static str = "
 00  00
  00000
     00
- 0000.
+ 0000
+
+  
+  00
+000000
+000000
+  00
  ";
 
 
@@ -91,6 +97,7 @@ pub struct DigitSymbolTable(
 );
 
 
+/*
 pub struct Number<'a>{
 	table:&'a DigitSymbolTable,
 	number:usize
@@ -110,6 +117,7 @@ impl<'a> Number<'a>{
 		DigitIter{inner,table}
 	}
 }
+
 
 pub struct DigitIter<'a>{
 	table:&'a DigitSymbolTable,
@@ -138,20 +146,22 @@ impl<'a> DoubleEndedIterator for DigitIter<'a>{
 	}
 }
 
+*/
 
 impl DigitSymbolTable{
 	pub fn new_default()->DigitSymbolTable{
-		DigitSymbolTable(SymbolTable::new(NUMSTR,6,10))
+		DigitSymbolTable(SymbolTable::new(NUMSTR,6,10 + 1))
 	}
 
 	pub fn lookup_digit(&self,num:u8)->Digit{
-		assert!(num<10);
+		assert!(num<=10);
 		Digit{num:num,inner:self.0.lookup(num as usize)}
 	}
-
+	/*
 	pub fn lookup_number(&self,number:usize)->Number{
 		Number{table:self,number}
 	}
+	*/
 
 
 }

@@ -18,7 +18,7 @@
 
 
 
-
+pub use digits_iterator;
 pub mod symbol;
 pub mod digit;
 
@@ -65,7 +65,7 @@ pub static MISCSTR:&'static str = "
 
 use crate::symbol::*;
 pub struct GameSymbolTable(
-	SymbolTable
+	pub SymbolTable
 );
 
 impl GameSymbolTable{
