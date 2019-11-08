@@ -11,4 +11,4 @@ edition = "2018"
 
 [dependencies]
 axgeom = "1.2.1"
-digits_iterator = {path="../digits-iterator-rs"}
+digits_iterator = {git="https://github.com/tiby312/digits-iterator-rs.git"}
